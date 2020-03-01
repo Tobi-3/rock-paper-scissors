@@ -31,9 +31,9 @@ function game() {
     let playerScore = 0;
     let computerScore =0;
     let result;
-
     let roundAmount = prompt('How many rounds do you want to play?:', 5)
     const currentScore = () => `Score:  ${playerScore}:${computerScore}`;
+    
     for (let round = 0; round < roundAmount; round++) {
         playerSelection = prompt(`choose 'Rock', 'Paper' or 'Scissors': `, computerPlay());
         result = playRound(playerSelection, computerPlay());
