@@ -45,5 +45,5 @@ function game() {
            (playerScore < 0)? "You Lose!":"Tie"; 
 }
 
-let gameWinner = game()
+let gameWinner = game();
 console.log(gameWinner);
