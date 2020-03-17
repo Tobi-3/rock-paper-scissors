@@ -1,55 +1,115 @@
+
+// game presettings
+let playerScore = 0;
+let computerScore = 0; 
+const rounds = 5;
+let gameOn = false;
+
+//=====================================================
+// DOM elements
+
+const btnContainer = document.getElementById('btn-container');
+const startBtn = document.getElementById('sta// switches from "start menu" to gamertGame');
+startBtn.addEventListener('click', toggleGameInterface);
+
+const createButton = (id, txt) => {
+    let btn = document.createElement('button');
+    btn.id = id;
+    btn.textContent = txt;
+
+    return btn;
+}
+
+const actionBtns = [];
+actionBtns.push(createButton('scissors', 'Scissors'));
+actionBtns.push(createButton('paper', 'Paper'));
+actionBtns.push(createButton('rock', 'Rock'));
+// actionBtns.forEach( btn => btnContainer.appendChild(btn));
+
+actionBtns.forEach( btn => btn.addEventListener('click', () => { 
+    if(!(playerScore === rounds || computerScore === rounds)) playRound(btn.textContent)}));
+
+const resultDiv = document.querySelector('#results');
+
+const scoreDiv = document.getElementById('score');
+scoreDiv.className = 'rslt';
+scoreDiv.id='scoreDiv';
+
+//=============================================================
+
+// switches from "start menu" to game or vice versa
+function toggleGameInterface() {
+    gameOn = !gameOn;
+
+    if (gameOn) {
+        startBtn.remove();
+        resultDiv.textContent='';
+
+        playerScore = 0;
+        computerScore = 0;
+        
+        scoreDiv.innerHTML = currentScoreText();
+        actionBtns.forEach(elem => btnContainer.appendChild(elem));
+        document.body.appendChild(resultDiv);
+        document.body.appendChild(scoreDiv);
+        
+
+    } else {
+        
+        scoreDiv.textContent='';
+        actionBtns.forEach(btn => btn.remove())
+        btnContainer.appendChild(startBtn);
+        
+    }
+
+}
+
+
+function currentScoreText() {
+    return `You ${playerScore}:${computerScore} Computer`
+}
+
+//choose random option
 function computerPlay() {
     const options = [`Rock`,`Paper`,`Scissors`];
     return options[Math.floor(Math.random() * options.length)];
 }
 
-function playRound(playerSelection, computerSelection) {
 
+function playRound(playerSelection) {
+
+    const computerSelection = computerPlay();
     const paper = `Paper`;
     const rock = `Rock`;
     const scissors = `Scissors`;
-    const capitalize = word => word[0].toUpperCase() + word.substr(1).toLowerCase();
-    
-    playerSelection = capitalize(playerSelection)
-    
-    if (playerSelection === paper && computerSelection === rock || 
-        playerSelection === rock && computerSelection === scissors ||
-        playerSelection === scissors && computerSelection === paper) {
-       
-        return `You Win this round! ${playerSelection} beats ${computerSelection}`;
+
+
+    const playerWinsRound = (player, computer) => (
+        playerSelection === paper && computerSelection === rock
+        || playerSelection === rock && computerSelection === scissors 
+        || playerSelection === scissors && computerSelection === paper
+    );
+
+    let resultText;
+    if (playerWinsRound(playerSelection, computerSelection)) {
+        playerScore++;
+        resultText = `You Win this round! ${playerSelection} beats ${computerSelection}`;
     } else if (playerSelection === computerSelection) {
-       return  `Tie! both played ${playerSelection}`;
+       resultText = `Tie! both played ${playerSelection}`;
     } else {
-        return `You Lose this round! ${computerSelection} beats ${playerSelection}`;
+        computerScore++;
+        resultText = `You Lose this round! ${computerSelection} beats ${playerSelection}`;
+    }
+
+    scoreDiv.textContent = currentScoreText();
+    resultDiv.textContent = `${resultText}`;
+
+    if(playerScore === 5) {
+        resultDiv.textContent =`You won this Game! Endscore: ${currentScoreText()}`;
+        toggleGameInterface();
+    } else if(computerScore === 5) {
+        resultDiv.textContent =`You lost this Game! Endscore: ${currentScoreText()}`;
+        toggleGameInterface();
     }
     
 }
-
-
-function game() {
-    let playerSelection;
-    let playerScore = 0;
-    let computerScore =0;
-    let result;
-    let roundAmount = prompt('How many rounds do you want to play?:', 5)
-    const currentScore = () => `Score:  ${playerScore}:${computerScore}`;
-    
-    for (let round = 0; round < roundAmount; round++) {
-        playerSelection = prompt(`choose 'Rock', 'Paper' or 'Scissors': `, computerPlay());
-        result = playRound(playerSelection, computerPlay());
-    
-        if (result.search(/win/i) >= 0) { playerScore++; } 
-        else if (result.search(/lose/i) >= 0) { computerScore++; }
-        
-        alert(result + '\n ' + currentScore());  
-        console.log(result + '\n' + currentScore());
-          
-    }
-
-    return (playerScore > computerScore)? `You Win! Final ${currentScore()}`:
-           (playerScore < computerScore)? `You Lose! Final ${currentScore()}`: `Tie! Final ${currentScore()}`;
-}
-
-let gameWinner = game();
-alert(gameWinner);
-console.log(gameWinner);

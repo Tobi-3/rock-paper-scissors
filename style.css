@@ -1,0 +1,21 @@
+body {
+    margin: 0px;
+}
+
+.btn-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    padding: 30px;
+}
+
+
+.btn-container button{
+    border-radius: 10%;
+
+}
+
+
+.rslt {
+    text-align: center;
+}
