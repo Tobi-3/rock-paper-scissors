@@ -9,7 +9,7 @@ let gameOn = false;
 // DOM elements
 
 const btnContainer = document.getElementById('btn-container');
-const startBtn = document.getElementById('sta// switches from "start menu" to gamertGame');
+const startBtn = document.getElementById('startGame'); // switches from "start menu" to game
 startBtn.addEventListener('click', toggleGameInterface);
 
 const createButton = (id, txt) => {
